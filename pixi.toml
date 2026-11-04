@@ -1,0 +1,25 @@
+[workspace]
+authors = ["Peter Von der Porten <peter@corbelspatial.com>"]
+channels = ["conda-forge"]
+name = "arcpixi"
+platforms = ["win-64"]
+version = "0.1.0"
+
+[dependencies]
+python = ">=3.14.10,<3.15"
+conda = ">=26.9.4,<27"
+
+[tasks]
+install = "python arcpixi.py"
+test = { cmd = "python arcpixi.py --dry-run", depends-on = ["lint"] }
+
+[environments.dev.dependencies]
+pixi-pycharm = ">=0.0.12,<0.0.13"
+python = ">=3.14.10,<3.15"
+ruff = ">=0.17.3,<0.18"
+ty = ">=0.0.97,<0.0.98"
+
+[environments.dev.tasks]
+lint = { depends-on = ["lint-format", "lint-types"] }
+lint-format = "ruff check --fix arcpixi.py"
+lint-types = "ty check --fix arcpixi.py"
