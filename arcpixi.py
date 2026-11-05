@@ -164,6 +164,7 @@ def install(
     print(f"- (Re)creating junction: {junction}")
     if not dry_run:
         junction.unlink(missing_ok=True)
+        junction.parent.mkdir(parents=True, exist_ok=True)
         _winapi.CreateJunction(
             (env / ".pixi/envs/default").as_posix(), junction.as_posix()
         )
