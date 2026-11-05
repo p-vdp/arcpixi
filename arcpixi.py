@@ -170,12 +170,62 @@ def install(
     print(_hr())
 
     print()
+    if not dry_run:
+        print(_hr("TESTING"))
+    else:
+        print(_hr("TESTING (DRY RUN)"))
+
+    conda_import_args = [
+        "conda",
+        "run",
+        "python",
+        "-c",
+        '"import arcpy"',
+        "-p",
+        junction.as_posix(),
+    ]
+    print(f"- Import test: {' '.join(conda_import_args)}")
+    if not dry_run:
+        test1 = run(
+            conda_import_args,
+            check=False,
+            capture_output=True,
+        )
+        test1.check_returncode()
+        assert test1.stdout.decode("utf-8") == ""
+        print("  - Passed")
+
+    conda_update_args = [
+        "conda",
+        "update",
+        "--all",
+        "--dry-run",
+        "-p",
+        junction.as_posix(),
+    ]
+    print(f"- Update test: {' '.join(conda_update_args)}")
+    if not dry_run:
+        test2 = run(
+            conda_update_args,
+            check=False,
+            capture_output=True,
+        )
+        test2.check_returncode()
+        assert "All requested packages already installed" in test2.stdout.decode(
+            "utf-8"
+        )
+        print("  - Passed")
+
+    print(_hr())
+
+    print()
     print("Done!")
     print(
         "Go to ArcGIS Pro -> Settings -> Package Manager -> Environment Manager "
         "(gear icon in upper right), then activate your new environment:"
     )
     print(junction)
+    print()
 
 
 if __name__ == "__main__":
