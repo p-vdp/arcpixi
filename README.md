@@ -25,6 +25,6 @@ Updating environments and adding packages with Pixi is faster and more transpare
 ## Adding Packages
 
 1. `cd arcpixi/arcpixi_env`
-2. `pixi add geopandas`
+2. `pixi add geopandas rasterio`
     - `pixi.toml` declares all dependencies and can be edited manually
 3. `pixi install`

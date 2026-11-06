@@ -118,14 +118,6 @@ def install(
     if not dry_run:
         run(pixi_init_args, check=False, capture_output=True)
 
-    pixi_config_toml = env / "config.toml"
-    print(f"- Writing: {pixi_config_toml}")
-    if not dry_run:
-        with open(pixi_config_toml, "w") as f:
-            f.write(
-                'run-post-link-scripts = "insecure"  # allow Scripts/.arcpy-base-post-link.bat'
-            )
-
     pixi_add_args = ["pixi", "add", "-m", env.as_posix()] + base_deps + deps
     print(f"- Adding dependencies: {' '.join(pixi_add_args)}")
     if not dry_run:
@@ -150,6 +142,14 @@ def install(
     print(f"- Copying pins: {pins_path} -> {pins_path_dest}")
     if not dry_run:
         pins_path.copy_into(pins_path_dest)
+
+    pixi_config_toml = env / ".pixi" / "config.toml"
+    print(f"- Writing: {pixi_config_toml}")
+    if not dry_run:
+        with open(pixi_config_toml, "w") as f:
+            f.write(
+                'run-post-link-scripts = "insecure"  # allows Scripts/.arcpy-base-post-link.bat'
+            )
 
     pixi_upgrade_args = ["pixi", "upgrade", "-m", env.as_posix()]
     print(f"- Running: {' '.join(pixi_upgrade_args)}")
